@@ -1,0 +1,39 @@
+name: Transhare IPO Monitor
+
+on:
+  schedule:
+    - cron: '0 */2 * * *'  # Every 2 hours
+  workflow_dispatch:  # Allows manual run from GitHub
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write  # Required to commit seen_filings.json back
+    
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run monitor
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
+        run: python main.py
+
+      - name: Save seen filings
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git pull --rebase
+          git add seen_filings.json
+          git diff --staged --quiet || git commit -m "Update seen filings"
+          git push || true
