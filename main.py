@@ -22,7 +22,7 @@ def save_seen(seen):
 
 def search_sec(query, form_type):
     """Search SEC full-text search for filings containing query"""
-    start_date = (datetime.now() - timedelta(days=2)).strftime('%Y-%m-%d')
+    start_date = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d')
     end_date = datetime.now().strftime('%Y-%m-%d')
     
     url = 'https://efts.sec.gov/LATEST/search-index'
