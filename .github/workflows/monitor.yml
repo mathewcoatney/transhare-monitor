@@ -2,7 +2,7 @@ name: Transhare IPO Monitor
 
 on:
   schedule:
-    - cron: '0 */2 * * *'
+    - cron: '0 13 * * *'
   workflow_dispatch:
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
       - env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
           SEC_USER_AGENT: "TranshareMonitor mathewcoatney@gmail.com"
-        run: python main.py
+        run: python daily_monitor.py
 
       - run: |
           git config user.name "github-actions"
